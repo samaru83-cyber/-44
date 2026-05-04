@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B1C3D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="분양 CRM">
+<title>분양 CRM</title>
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%EB%B6%84%EC%96%91%20CRM%22%2C%22short_name%22%3A%22%EB%B6%84%EC%96%91CRM%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230B1C3D%22%2C%22theme_color%22%3A%22%230B1C3D%22%2C%22icons%22%3A%5B%5D%7D">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1C3D; --navy-2:#142a55; --navy-soft:#1e3768;
+  --gold:#C9973A; --gold-soft:#e0b766;
+  --red:#EF4444; --orange:#F97316; --blue:#3B82F6; --gray:#6B7280; --green:#22C55E;
+  --bg:#F4F5F7; --card:#FFFFFF; --line:#E6E8EC;
+  --text:#0F172A; --text-2:#475569; --text-3:#94A3B8;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05);
+  --shadow:0 4px 14px rgba(15,23,42,.08);
+  --shadow-lg:0 10px 28px rgba(15,23,42,.14);
+  --r-sm:10px; --r:14px; --r-lg:20px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+  --credit-h: 34px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:14px; color:var(--text); background:var(--bg);
+  letter-spacing:-0.01em; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden; min-height:100vh; min-height:100dvh;
+}
+button,input,textarea,select{font-family:inherit; font-size:inherit; color:inherit;}
+button{border:none; background:none; cursor:pointer; padding:0;}
+input,textarea,select{outline:none;}
+.app{
+  max-width:430px; margin:0 auto; min-height:100vh; min-height:100dvh;
+  background:var(--bg); position:relative; overflow:hidden;
+  box-shadow:0 0 60px rgba(0,0,0,.06);
+}
+
+/* ============ HEADER ============ */
+.header{
+  position:sticky; top:0; z-index:50;
+  background:var(--navy); color:#fff;
+  padding:calc(var(--safe-top) + 14px) 18px 14px;
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow:0 1px 0 rgba(255,255,255,.05), 0 8px 20px -10px rgba(11,28,61,.4);
+}
+.header .brand{display:flex; align-items:center; gap:10px;}
+.header .brand-mark{
+  width:30px; height:30px; border-radius:9px;
+  background:linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+  display:grid; place-items:center; color:var(--navy); font-weight:800; font-size:14px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+}
+.header .title{font-size:16px; font-weight:700; letter-spacing:-0.02em;}
+.header .subtitle{font-size:11px; color:rgba(255,255,255,.55); margin-top:1px; font-weight:500;}
+.btn-add{
+  background:var(--gold); color:var(--navy);
+  font-weight:700; font-size:13px;
+  padding:9px 14px; border-radius:999px;
+  display:flex; align-items:center; gap:5px;
+  transition:transform .12s ease, background .12s ease;
+  box-shadow:0 2px 8px rgba(201,151,58,.3);
+}
+.btn-add:active{transform:scale(.93); background:var(--gold-soft);}
+
+/* ============ SITE TABS ============ */
+.site-bar{
+  background:var(--navy);
+  padding:0 0 12px;
+  display:flex; align-items:center; gap:0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.site-tabs{
+  flex:1; display:flex; gap:6px;
+  overflow-x:auto; padding:2px 0 4px 18px;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+.site-tabs::-webkit-scrollbar{display:none;}
+.site-tab{
+  flex-shrink:0; padding:8px 14px;
+  background:rgba(255,255,255,.07); color:rgba(255,255,255,.7);
+  border-radius:999px; font-size:12.5px; font-weight:600;
+  white-space:nowrap; transition:all .15s ease;
+  display:flex; align-items:center; gap:6px;
+}
+.site-tab.active{background:var(--gold); color:var(--navy);}
+.site-tab .count{
+  background:rgba(0,0,0,.15); padding:1px 7px; border-radius:999px;
+  font-size:10.5px; font-weight:700; min-width:18px; text-align:center;
+}
+.site-tab.active .count{background:rgba(11,28,61,.18); color:var(--navy);}
+.site-tab:not(.active) .count{background:rgba(255,255,255,.13);}
+.btn-site-manage{
+  flex-shrink:0; width:36px; height:36px; margin-right:14px; margin-left:8px;
+  display:grid; place-items:center;
+  background:rgba(255,255,255,.08); color:#fff;
+  border-radius:10px; font-size:16px;
+  transition:all .12s ease;
+}
+.btn-site-manage:active{transform:scale(.92); background:rgba(255,255,255,.15);}
+
+/* ============ MAIN CONTENT ============ */
+.content{
+  padding:14px 14px calc(80px + var(--credit-h) + var(--safe-bot));
+  min-height:calc(100vh - 200px);
+}
+
+/* ============ HOME ============ */
+.status-banner{
+  background:linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+  color:#fff; border-radius:var(--r-lg);
+  padding:18px; margin-bottom:16px; position:relative; overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.status-banner::before{
+  content:''; position:absolute; right:-30px; top:-30px;
+  width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle, rgba(201,151,58,.15) 0%, transparent 70%);
+}
+.status-banner .label{
+  font-size:11px; font-weight:600; color:var(--gold-soft);
+  letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px;
+}
+.status-banner .greeting{font-size:18px; font-weight:700; margin-bottom:14px;}
+.status-grid{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;
+  position:relative; z-index:1;
+}
+.status-cell{
+  background:rgba(255,255,255,.07); border-radius:12px;
+  padding:10px 8px; text-align:center;
+  backdrop-filter: blur(10px);
+  border:1px solid rgba(255,255,255,.06);
+}
+.status-cell.urgent{
+  background:linear-gradient(135deg, rgba(239,68,68,.25), rgba(239,68,68,.1));
+  border-color:rgba(239,68,68,.3);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4);}
+  50%{box-shadow:0 0 0 6px rgba(239,68,68,0);}
+}
+.status-cell .num{font-size:22px; font-weight:800; line-height:1;}
+.status-cell .desc{font-size:10.5px; color:rgba(255,255,255,.7); margin-top:5px; font-weight:500;}
+.status-cell.urgent .num{color:#FCA5A5;}
+
+.section{margin-bottom:18px;}
+.section-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; padding:0 4px;
+}
+.section-title{font-size:14px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:6px;}
+.section-title .dot{
+  width:6px; height:6px; border-radius:50%; background:var(--red);
+}
+.section-count{font-size:11.5px; color:var(--text-3); font-weight:600;}
+
+/* Customer card on home */
+.action-card{
+  background:var(--card); border-radius:var(--r); padding:14px;
+  margin-bottom:8px; box-shadow:var(--shadow-sm);
+  border:1px solid var(--line);
+  display:flex; align-items:center; gap:12px;
+  transition:transform .15s ease;
+}
+.action-card:active{transform:scale(.98);}
+.action-card .info{flex:1; min-width:0;}
+.action-card .name-row{display:flex; align-items:center; gap:6px; margin-bottom:3px;}
+.action-card .name{font-weight:700; font-size:14.5px;}
+.action-card .brief{font-size:12px; color:var(--text-2); line-height:1.4;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.action-card .meta{font-size:11px; color:var(--text-3); margin-top:3px;}
+.action-card .quick-call{
+  flex-shrink:0; width:42px; height:42px; border-radius:50%;
+  background:linear-gradient(135deg, var(--green), #15803d);
+  color:#fff; display:grid; place-items:center; font-size:18px;
+  box-shadow:0 4px 12px rgba(34,197,94,.3);
+  transition:transform .12s ease;
+}
+.action-card .quick-call:active{transform:scale(.9);}
+
+/* warning card */
+.warn-card{
+  background:linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%);
+  border:1px solid #FDE68A; border-radius:var(--r);
+  padding:12px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+}
+.warn-card .icon{font-size:18px;}
+.warn-card .text{flex:1;}
+.warn-card .text b{font-size:13px; color:#92400E;}
+.warn-card .text p{margin:2px 0 0; font-size:11.5px; color:#78350F;}
+
+/* Empty state */
+.empty{
+  text-align:center; padding:40px 20px; color:var(--text-3);
+}
+.empty .emoji{font-size:36px; margin-bottom:8px; opacity:.6;}
+.empty .msg{font-size:13px; font-weight:500;}
+.empty .sub{font-size:11.5px; margin-top:4px; color:var(--text-3);}
+
+/* ============ FILTER CHIPS ============ */
+.filter-chips{
+  display:flex; gap:6px; overflow-x:auto; padding:0 0 8px;
+  scrollbar-width:none; margin:-2px -14px 12px; padding-left:14px; padding-right:14px;
+}
+.filter-chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex-shrink:0; padding:7px 13px;
+  background:#fff; color:var(--text-2);
+  border-radius:999px; font-size:12.5px; font-weight:600;
+  border:1px solid var(--line); transition:all .12s ease;
+}
+.chip.active{background:var(--navy); color:#fff; border-color:var(--navy);}
+.chip.active.s{background:var(--red); border-color:var(--red);}
+.chip.active.a{background:var(--orange); border-color:var(--orange);}
+.chip.active.b{background:var(--blue); border-color:var(--blue);}
+.chip.active.c{background:var(--gray); border-color:var(--gray);}
+.chip.active.contracted{background:var(--green); border-color:var(--green);}
+
+/* ============ CUSTOMER LIST ============ */
+.cust-card{
+  background:var(--card); border-radius:var(--r); padding:13px 14px;
+  margin-bottom:8px; box-shadow:var(--shadow-sm);
+  border:1px solid var(--line); display:flex; align-items:center; gap:11px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.cust-card:active{transform:scale(.98);}
+.cust-card .grade-badge{
+  flex-shrink:0; width:34px; height:34px; border-radius:10px;
+  display:grid; place-items:center; font-weight:800; font-size:14px; color:#fff;
+}
+.cust-card .grade-badge.S{background:linear-gradient(135deg, #ef4444, #dc2626);}
+.cust-card .grade-badge.A{background:linear-gradient(135deg, #f97316, #ea580c);}
+.cust-card .grade-badge.B{background:linear-gradient(135deg, #3b82f6, #2563eb);}
+.cust-card .grade-badge.C{background:linear-gradient(135deg, #6b7280, #4b5563);}
+.cust-card .grade-badge.contracted{background:linear-gradient(135deg, #22c55e, #16a34a); font-size:11px;}
+.cust-card .body{flex:1; min-width:0;}
+.cust-card .top{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:2px;}
+.cust-card .name{font-weight:700; font-size:14.5px;}
+.cust-card .dday{font-size:11px; font-weight:700; flex-shrink:0;}
+.cust-card .dday.urgent{color:var(--red);}
+.cust-card .dday.warn{color:var(--orange);}
+.cust-card .dday.normal{color:var(--text-3);}
+.cust-card .dday.contracted{color:var(--green);}
+.cust-card .brief{font-size:12px; color:var(--text-2); line-height:1.4;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* ============ DETAIL PANEL ============ */
+.detail-panel{
+  position:fixed; top:0; right:0; bottom:0;
+  width:100%; max-width:430px;
+  background:var(--bg); z-index:100;
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.32,.72,.24,1);
+  overflow-y:auto; overflow-x:hidden;
+  display:flex; flex-direction:column;
+  margin:0 auto; left:0;
+  -webkit-overflow-scrolling:touch;
+}
+.detail-panel.open{transform:translateX(0);}
+.detail-header{
+  position:sticky; top:0; z-index:5;
+  background:var(--navy); color:#fff;
+  padding:calc(var(--safe-top) + 12px) 14px 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.btn-back{
+  width:36px; height:36px; border-radius:10px;
+  display:grid; place-items:center; color:#fff;
+  background:rgba(255,255,255,.07); font-size:18px;
+}
+.btn-back:active{background:rgba(255,255,255,.15);}
+.detail-header .head-name{font-size:16px; font-weight:700; flex:1;}
+.btn-edit-cust{
+  padding:7px 12px; border-radius:8px;
+  background:rgba(255,255,255,.1); color:#fff;
+  font-size:12px; font-weight:600;
+}
+.btn-edit-cust:active{background:rgba(255,255,255,.18);}
+
+/* Briefing card */
+.brief-card{
+  background:
+    radial-gradient(circle at 110% 110%, rgba(201,151,58,.18) 0%, transparent 55%),
+    linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+  color:#fff; padding:14px 18px 18px; margin:14px;
+  border-radius:var(--r-lg); position:relative; overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.brief-card .grade-row{display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+.brief-pill{
+  padding:5px 12px; border-radius:999px;
+  font-size:12px; font-weight:700;
+}
+.brief-pill.S{background:rgba(239,68,68,.3); color:#FECACA; border:1px solid rgba(239,68,68,.5);}
+.brief-pill.A{background:rgba(249,115,22,.3); color:#FED7AA; border:1px solid rgba(249,115,22,.5);}
+.brief-pill.B{background:rgba(59,130,246,.3); color:#BFDBFE; border:1px solid rgba(59,130,246,.5);}
+.brief-pill.C{background:rgba(107,114,128,.35); color:#E5E7EB; border:1px solid rgba(107,114,128,.5);}
+.brief-pill.contracted{background:rgba(34,197,94,.3); color:#BBF7D0; border:1px solid rgba(34,197,94,.5);}
+.brief-card .freq{font-size:13px; color:rgba(255,255,255,.9); font-weight:600;}
+.brief-card .label{
+  font-size:12px; color:#F4D88E; font-weight:700;
+  margin-bottom:8px;
+}
+.brief-card .brief-line{
+  font-size:15.5px; line-height:1.6; font-weight:600;
+  color:#fff; word-break:keep-all;
+}
+
+/* Action buttons */
+.action-row{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+  padding:0 14px; margin-bottom:14px;
+}
+.act-btn{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--r); padding:14px 6px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  font-size:11.5px; font-weight:600; color:var(--text);
+  transition:all .12s ease;
+  box-shadow:var(--shadow-sm);
+}
+.act-btn:active{transform:scale(.94);}
+.act-btn .ic{font-size:20px; line-height:1;}
+.act-btn.call{background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0; color:#15803d;}
+.act-btn.sms{background:linear-gradient(135deg, #eff6ff, #ffffff); border-color:#bfdbfe; color:#1d4ed8;}
+.act-btn.memo{background:linear-gradient(135deg, #fefce8, #ffffff); border-color:#fde68a; color:#a16207;}
+.act-btn.log{background:linear-gradient(135deg, #fef2f2, #ffffff); border-color:#fecaca; color:#b91c1c;}
+
+/* Recommend box */
+.recommend-card{
+  background:#fff; margin:0 14px 14px;
+  padding:14px; border-radius:var(--r);
+  border-left:3px solid var(--gold);
+  box-shadow:var(--shadow-sm);
+}
+.recommend-card .label{
+  font-size:11.5px; color:var(--gold); font-weight:700;
+  letter-spacing:.02em; margin-bottom:6px;
+}
+.recommend-card .text{font-size:14px; line-height:1.55; color:var(--text); font-weight:600;}
+
+/* Info grid */
+.info-section{margin:0 14px 14px;}
+.section-label{
+  font-size:12px; color:var(--text-3); font-weight:700;
+  letter-spacing:.02em; margin-bottom:8px; padding:0 2px;
+}
+.info-grid{
+  background:#fff; border-radius:var(--r);
+  display:grid; grid-template-columns:1fr 1fr;
+  overflow:hidden; box-shadow:var(--shadow-sm); border:1px solid var(--line);
+}
+.info-cell{
+  padding:12px 13px; border-bottom:1px solid var(--line);
+  cursor:pointer; transition:background .12s;
+}
+.info-cell:nth-child(odd){border-right:1px solid var(--line);}
+.info-cell:nth-last-child(-n+2){border-bottom:none;}
+.info-cell:active{background:#F8FAFC;}
+.info-cell .k{font-size:11.5px; color:var(--text-3); font-weight:600; margin-bottom:4px;}
+.info-cell .v{font-size:14px; color:var(--text); font-weight:700; word-break:break-all;}
+.info-cell .v.empty{color:var(--text-3); font-weight:500;}
+
+/* Memo card */
+.memo-card{
+  background:#fff; margin:0 14px 14px; padding:14px;
+  border-radius:var(--r); box-shadow:var(--shadow-sm); border:1px solid var(--line);
+  cursor:pointer;
+}
+.memo-card .text{font-size:13.5px; line-height:1.6; color:var(--text); white-space:pre-wrap; font-weight:500;}
+.memo-card .text.empty{color:var(--text-3); font-style:italic; font-weight:500;}
+
+/* Units card */
+.unit-list{display:flex; flex-direction:column; gap:8px;}
+.unit-card{
+  background:#fff; padding:12px 14px; border-radius:var(--r);
+  border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  display:flex; align-items:center; gap:10px;
+}
+.unit-card .info{flex:1;}
+.unit-card .top{display:flex; align-items:center; gap:8px; margin-bottom:3px;}
+.unit-card .unitno{font-weight:700; font-size:14px;}
+.unit-card .type{font-size:11.5px; color:var(--text-2);
+  background:var(--bg); padding:2px 7px; border-radius:6px; font-weight:600;}
+.unit-status{font-size:10.5px; padding:2px 7px; border-radius:6px; font-weight:700;}
+.unit-status.available{background:#DBEAFE; color:#1E40AF;}
+.unit-status.nego{background:#FEF3C7; color:#92400E;}
+.unit-status.contracted{background:#D1FAE5; color:#065F46;}
+.unit-status.hold{background:#F3F4F6; color:#4B5563;}
+.unit-card .fee{font-size:13px; color:var(--gold); font-weight:800;}
+.unit-card .memo{font-size:11.5px; color:var(--text-3); margin-top:3px;}
+.btn-add-unit{
+  width:100%; padding:11px; margin-top:8px;
+  background:#fff; border:1.5px dashed var(--line);
+  border-radius:var(--r); color:var(--text-2); font-size:12.5px; font-weight:600;
+}
+.btn-add-unit:active{background:#F8FAFC; border-color:var(--gold);}
+
+/* Logs */
+.log-list{display:flex; flex-direction:column; gap:8px;}
+.log-item{
+  background:#fff; padding:12px 14px; border-radius:var(--r);
+  border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  position:relative;
+}
+.log-item .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:5px;}
+.log-method{
+  font-size:10.5px; padding:2px 8px; border-radius:6px; font-weight:700;
+  background:var(--navy); color:#fff;
+}
+.log-method.call{background:#22C55E;}
+.log-method.kakao{background:#FFCD00; color:#3C1E1E;}
+.log-method.sms{background:#3B82F6;}
+.log-date{font-size:11px; color:var(--text-3); font-weight:600;}
+.log-content{font-size:13.5px; line-height:1.55; color:var(--text); margin-bottom:5px; font-weight:500;}
+.log-next{font-size:12px; color:var(--gold); font-weight:700;}
+.log-next::before{content:'→ '; opacity:.7;}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav{
+  position:fixed; bottom:calc(var(--credit-h) + var(--safe-bot)); left:0; right:0;
+  max-width:430px; margin:0 auto;
+  background:rgba(255,255,255,.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(3,1fr);
+  padding:8px 0; z-index:40;
+}
+.nav-btn{
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:6px; color:var(--text-3); font-size:10.5px; font-weight:600;
+  transition:color .12s;
+}
+.nav-btn .ic{font-size:20px; line-height:1;}
+.nav-btn.active{color:var(--navy);}
+.nav-btn.active .ic{transform:scale(1.05);}
+
+/* ============ CREDIT BAR (제작자 / 문의) ============ */
+.credit-bar{
+  position:fixed; left:0; right:0; bottom:0;
+  max-width:430px; margin:0 auto;
+  height:calc(var(--credit-h) + var(--safe-bot));
+  padding-bottom:var(--safe-bot);
+  background:linear-gradient(180deg, #08152e 0%, #050d1c 100%);
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  font-size:11px; font-weight:500; letter-spacing:.01em;
+  color:rgba(255,255,255,.78);
+  border-top:1px solid rgba(201,151,58,.22);
+  z-index:150;
+  box-shadow:0 -6px 20px rgba(0,0,0,.18);
+}
+.credit-bar .credit-label{
+  color:rgba(255,255,255,.5); font-weight:500;
+}
+.credit-bar .credit-divider{
+  width:3px; height:3px; border-radius:50%;
+  background:var(--gold); opacity:.7;
+}
+.credit-bar .credit-name{
+  color:#fff; font-weight:700;
+}
+.credit-bar a.credit-tel{
+  color:var(--gold-soft); font-weight:700;
+  text-decoration:none; letter-spacing:.02em;
+  padding:3px 8px; border-radius:6px;
+  background:rgba(201,151,58,.1);
+  border:1px solid rgba(201,151,58,.25);
+  transition:all .12s ease;
+}
+.credit-bar a.credit-tel:active{
+  background:rgba(201,151,58,.25);
+  transform:scale(.95);
+}
+
+/* ============ MODAL / BOTTOM SHEET ============ */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(15,23,42,.5);
+  z-index:200; opacity:0; pointer-events:none;
+  transition:opacity .25s ease;
+}
+.modal-backdrop.open{opacity:1; pointer-events:auto;}
+.bottom-sheet{
+  position:fixed; left:50%; bottom:0; transform:translate(-50%, 100%);
+  width:100%; max-width:430px; background:#fff;
+  border-radius:24px 24px 0 0; z-index:201;
+  transition:transform .3s cubic-bezier(.32,.72,.24,1);
+  max-height:88vh; overflow:hidden;
+  display:flex; flex-direction:column;
+  padding-bottom:var(--safe-bot);
+}
+.bottom-sheet.open{transform:translate(-50%, 0);}
+.sheet-handle{
+  width:36px; height:4px; background:#E2E8F0; border-radius:999px;
+  margin:10px auto 0;
+}
+.sheet-head{
+  padding:14px 18px 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--line);
+}
+.sheet-head h3{margin:0; font-size:16px; font-weight:700;}
+.sheet-close{
+  width:30px; height:30px; border-radius:8px; color:var(--text-2);
+  display:grid; place-items:center; font-size:16px;
+  background:var(--bg);
+}
+.sheet-body{
+  padding:16px 18px 20px; overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.field-label{
+  font-size:11.5px; color:var(--text-2); font-weight:600;
+  margin-bottom:6px; display:block;
+}
+.field-label .req{color:var(--red); margin-left:2px;}
+.input, .textarea, .select{
+  width:100%; padding:11px 12px;
+  border:1px solid var(--line); border-radius:10px;
+  background:#fff; font-size:13.5px; color:var(--text);
+  transition:border-color .12s, background .12s;
+}
+.input:focus, .textarea:focus, .select:focus{
+  border-color:var(--navy); background:#fff;
+}
+.textarea{resize:none; min-height:80px; font-family:inherit;}
+.select{appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2394A3B8' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
+}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.field-row.three{grid-template-columns:repeat(3,1fr);}
+
+.grade-picker{display:grid; grid-template-columns:repeat(5,1fr); gap:6px;}
+.grade-opt{
+  padding:10px 0; border-radius:10px;
+  background:#F8FAFC; border:1.5px solid transparent;
+  font-weight:700; font-size:13px; color:var(--text-2);
+  text-align:center; transition:all .12s ease;
+}
+.grade-opt[data-g="S"].selected{background:#FEE2E2; color:var(--red); border-color:var(--red);}
+.grade-opt[data-g="A"].selected{background:#FFEDD5; color:var(--orange); border-color:var(--orange);}
+.grade-opt[data-g="B"].selected{background:#DBEAFE; color:var(--blue); border-color:var(--blue);}
+.grade-opt[data-g="C"].selected{background:#F3F4F6; color:var(--gray); border-color:var(--gray);}
+.grade-opt[data-g="계약"].selected{background:#D1FAE5; color:var(--green); border-color:var(--green); font-size:11px;}
+
+.method-picker{display:grid; grid-template-columns:repeat(4,1fr); gap:6px;}
+.method-opt{
+  padding:10px 0; border-radius:10px;
+  background:#F8FAFC; border:1.5px solid transparent;
+  font-weight:600; font-size:12.5px; color:var(--text-2);
+  text-align:center; transition:all .12s ease;
+}
+.method-opt.selected{background:var(--navy); color:#fff; border-color:var(--navy);}
+
+.status-picker{display:grid; grid-template-columns:repeat(2,1fr); gap:6px;}
+.status-opt{
+  padding:10px; border-radius:10px;
+  background:#F8FAFC; border:1.5px solid transparent;
+  font-weight:600; font-size:12.5px; text-align:center;
+}
+.status-opt.selected[data-s="available"]{background:#DBEAFE; color:#1E40AF; border-color:var(--blue);}
+.status-opt.selected[data-s="nego"]{background:#FEF3C7; color:#92400E; border-color:var(--orange);}
+.status-opt.selected[data-s="contracted"]{background:#D1FAE5; color:#065F46; border-color:var(--green);}
+.status-opt.selected[data-s="hold"]{background:#F3F4F6; color:#4B5563; border-color:var(--gray);}
+
+.opt-picker{
+  display:grid; grid-template-columns:repeat(2,1fr); gap:6px;
+}
+.opt-picker.cols-3{grid-template-columns:repeat(3,1fr);}
+.opt-row{
+  padding:11px 8px; border-radius:10px;
+  background:#F8FAFC; border:1.5px solid transparent;
+  font-weight:600; font-size:13px; color:var(--text-2);
+  text-align:center; transition:all .12s ease;
+  word-break:keep-all;
+}
+.opt-row.selected{background:var(--navy); color:#fff; border-color:var(--navy);}
+.opt-row:active{transform:scale(.96);}
+
+.sheet-actions{
+  padding:12px 18px calc(14px + var(--safe-bot)); border-top:1px solid var(--line);
+  display:flex; gap:8px;
+}
+.btn{
+  flex:1; padding:13px 0; border-radius:12px;
+  font-size:14px; font-weight:700; transition:all .12s ease;
+}
+.btn-primary{background:var(--navy); color:#fff;}
+.btn-primary:active{transform:scale(.98); background:var(--navy-soft);}
+.btn-secondary{background:#F1F5F9; color:var(--text);}
+.btn-secondary:active{background:#E2E8F0;}
+.btn-danger{background:#FEE2E2; color:var(--red);}
+.btn-danger:active{background:#FECACA;}
+.btn-gold{background:var(--gold); color:var(--navy);}
+.btn-gold:active{background:var(--gold-soft);}
+
+/* Site management list */
+.site-row{
+  display:flex; align-items:center; gap:10px;
+  padding:12px; border:1px solid var(--line);
+  border-radius:var(--r); margin-bottom:8px; background:#fff;
+}
+.site-row .info{flex:1;}
+.site-row .nm{font-weight:700; font-size:14px;}
+.site-row .ad{font-size:11.5px; color:var(--text-3); margin-top:2px;}
+.site-row .icons{display:flex; gap:6px;}
+.icon-btn{
+  width:32px; height:32px; border-radius:8px;
+  background:var(--bg); display:grid; place-items:center;
+  font-size:14px; color:var(--text-2);
+}
+.icon-btn:active{background:#E2E8F0;}
+.icon-btn.danger{color:var(--red);}
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed; bottom:calc(96px + var(--credit-h) + var(--safe-bot)); left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--navy); color:#fff;
+  padding:11px 18px; border-radius:999px;
+  font-size:13px; font-weight:600; z-index:300;
+  opacity:0; pointer-events:none;
+  transition:all .25s ease;
+  box-shadow:0 8px 24px rgba(11,28,61,.35);
+  white-space:nowrap;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ============ GUIDE ============ */
+.guide-card{
+  background:#fff; border-radius:var(--r-lg); padding:16px;
+  margin-bottom:10px; box-shadow:var(--shadow-sm); border:1px solid var(--line);
+}
+.guide-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.guide-grade{
+  width:38px; height:38px; border-radius:11px;
+  display:grid; place-items:center; font-weight:800; font-size:15px; color:#fff;
+}
+.guide-card.s .guide-grade{background:linear-gradient(135deg, #ef4444, #dc2626);}
+.guide-card.a .guide-grade{background:linear-gradient(135deg, #f97316, #ea580c);}
+.guide-card.b .guide-grade{background:linear-gradient(135deg, #3b82f6, #2563eb);}
+.guide-card.c .guide-grade{background:linear-gradient(135deg, #6b7280, #4b5563);}
+.guide-card.contracted .guide-grade{background:linear-gradient(135deg, #22c55e, #16a34a); font-size:12px;}
+.guide-card .h-text{flex:1;}
+.guide-card .h-title{font-weight:700; font-size:14.5px;}
+.guide-card .h-sub{font-size:11.5px; color:var(--text-3); margin-top:2px;}
+.guide-line{display:flex; gap:8px; padding:6px 0; align-items:flex-start; font-size:12.5px; line-height:1.5;}
+.guide-line .k{flex-shrink:0; width:60px; color:var(--text-3); font-weight:600;}
+.guide-line .v{flex:1; color:var(--text); font-weight:500;}
+.guide-warn{
+  background:linear-gradient(135deg, #FEF2F2, #fff); 
+  border:1px solid #FECACA; border-radius:var(--r-lg);
+  padding:16px; margin-top:10px;
+}
+.guide-warn h4{margin:0 0 10px; font-size:14.5px; color:#991B1B; display:flex; align-items:center; gap:6px;}
+.guide-warn ul{margin:0; padding-left:0; list-style:none;}
+.guide-warn li{
+  font-size:12.5px; color:#7F1D1D; line-height:1.55;
+  padding:5px 0 5px 20px; position:relative; font-weight:500;
+}
+.guide-warn li::before{
+  content:'✕'; position:absolute; left:0; top:5px;
+  color:var(--red); font-weight:800;
+}
+
+/* SMS preview */
+.sms-preview{
+  background:#F1F5F9; padding:14px; border-radius:var(--r);
+  font-size:13px; line-height:1.6; color:var(--text);
+  white-space:pre-wrap; max-height:240px; overflow-y:auto;
+  margin-bottom:12px;
+}
+
+/* page transition */
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.fade-in{animation:fadeIn .25s ease;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-mark">B</div>
+    <div>
+      <div class="title">분양 CRM</div>
+      <div class="subtitle" id="subtitle">고객을 계약으로</div>
+    </div>
+  </div>
+  <button class="btn-add" id="btn-new-cust">+ 고객등록</button>
+</header>
+
+<div class="site-bar">
+  <div class="site-tabs" id="site-tabs"></div>
+  <button class="btn-site-manage" id="btn-site-manage" aria-label="현장관리">⚙</button>
+</div>
+
+<main class="content" id="content"></main>
+
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn" data-tab="home"><span class="ic">●</span><span>홈</span></button>
+  <button class="nav-btn" data-tab="customers"><span class="ic">◎</span><span>고객</span></button>
+  <button class="nav-btn" data-tab="guide"><span class="ic">★</span><span>가이드</span></button>
+</nav>
+
+<div class="credit-bar" role="contentinfo">
+  <span class="credit-label">분양현장 투입문의</span>
+  <span class="credit-divider"></span>
+  <span class="credit-name">김진성</span>
+  <a class="credit-tel" href="tel:01077732323" aria-label="김진성에게 전화걸기">010-7773-2323</a>
+</div>
+
+<aside class="detail-panel" id="detail-panel" aria-hidden="true"></aside>
+
+<div class="modal-backdrop" id="modal-backdrop"></div>
+<div class="bottom-sheet" id="sheet"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===========================================================
+   분양 CRM — 단일 파일 구현
+   localStorage 기반 / Vanilla JS
+   =========================================================== */
+
+/* ---------- 유틸 ---------- */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
+const esc = (s='') => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+function todayStr(){
+  const d = new Date();
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function dateOffset(days){
+  const d = new Date(); d.setDate(d.getDate()+days);
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function daysBetween(dateStr){
+  if(!dateStr) return null;
+  const target = new Date(dateStr+'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.round((target - today) / (1000*60*60*24));
+}
+function fmtDate(s){
+  if(!s) return '-';
+  const [y,m,d] = s.split('-');
+  return `${m}.${d}`;
+}
+function fmtDateFull(s){
+  if(!s) return '-';
+  const [y,m,d] = s.split('-');
+  return `${y}.${m}.${d}`;
+}
+function ddayLabel(s){
+  if(!s) return {t:'미설정', cls:'normal'};
+  const d = daysBetween(s);
+  if(d === null) return {t:'미설정', cls:'normal'};
+  if(d < 0) return {t:`+${Math.abs(d)}일 지남`, cls:'urgent'};
+  if(d === 0) return {t:'오늘', cls:'urgent'};
+  if(d <= 3) return {t:`D-${d}`, cls:'warn'};
+  return {t:`D-${d}`, cls:'normal'};
+}
+
+/* ---------- 상태 / 저장 ---------- */
+const STORAGE_KEY = 'bunyangCRM_v1';
+const state = {
+  sites: [],
+  customers: [],
+  currentSiteId: null,
+  currentTab: 'home',
+  currentFilter: 'all',
+  selectedId: null,
+};
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    sites: state.sites,
+    customers: state.customers,
+    currentSiteId: state.currentSiteId,
+  }));
+}
+
+function load(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    try{
+      const d = JSON.parse(raw);
+      state.sites = d.sites || [];
+      state.customers = d.customers || [];
+      state.currentSiteId = d.currentSiteId || (state.sites[0]?.id || null);
+    }catch(e){console.warn(e);}
+  }
+  if(state.sites.length === 0) seed();
+}
+
+function seed(){
+  const sId = uid();
+  state.sites = [{ id:sId, name:'래미안 퍼스티지', addr:'서울 서초구' }];
+  state.currentSiteId = sId;
+
+  state.customers = [
+    {
+      id:uid(), siteId:sId, name:'김영철', phone:'010-1234-5678',
+      grade:'S', score:9, type:'84㎡', purpose:'실거주',
+      fund:'2~3억', loan:'DSR 여유', nextdate:todayStr(), contractDate:'',
+      memo:'남향 로열층 강력 희망. 자녀 학군 매우 중시. 결정 빠른 편.',
+      units:[],
+      logs:[
+        {id:uid(), date:dateOffset(-5), method:'방문', content:'모델하우스 방문 84㎡ 적극 검토', next:'호수 안내'},
+        {id:uid(), date:dateOffset(-3), method:'전화', content:'1504호 추천, 긍정 반응', next:'재방문 약속'},
+        {id:uid(), date:dateOffset(-1), method:'방문', content:'배우자 동반 재방문, 계약 임박', next:'오늘 결정 통보'},
+      ]
+    },
+    {
+      id:uid(), siteId:sId, name:'박민수', phone:'010-2345-6789',
+      grade:'A', score:7, type:'59㎡', purpose:'투자', 
+      fund:'1~2억', loan:'대출 검토중', nextdate:dateOffset(2), contractDate:'',
+      memo:'전세 끼고 갭투자 고려. 수익률 자료 요청.',
+      units:[],
+      logs:[
+        {id:uid(), date:dateOffset(-7), method:'카카오', content:'분양 자료 발송', next:'반응 체크'},
+        {id:uid(), date:dateOffset(-2), method:'전화', content:'할인 조건 문의, 진지한 검토', next:'조건 정리'},
+      ]
+    },
+    {
+      id:uid(), siteId:sId, name:'이수진', phone:'010-3456-7890',
+      grade:'B', score:5, type:'84㎡', purpose:'실거주',
+      fund:'3억+', loan:'무담보 가능', nextdate:dateOffset(5), contractDate:'',
+      memo:'타 단지 비교 중. 평형 고민.',
+      units:[],
+      logs:[
+        {id:uid(), date:dateOffset(-10), method:'방문', content:'1차 상담', next:'정보 제공'},
+      ]
+    },
+    {
+      id:uid(), siteId:sId, name:'최정훈', phone:'010-4567-8901',
+      grade:'C', score:3, type:'59㎡', purpose:'투자',
+      fund:'미정', loan:'미상', nextdate:dateOffset(15), contractDate:'',
+      memo:'분양 시장 정보 수집 단계. 천천히 결정한다고 함.',
+      units:[],
+      logs:[
+        {id:uid(), date:dateOffset(-20), method:'문자', content:'시장 동향 자료 발송', next:'장기 관리'},
+      ]
+    },
+    {
+      id:uid(), siteId:sId, name:'정유경', phone:'010-5678-9012',
+      grade:'계약', score:10, type:'84㎡', purpose:'실거주',
+      fund:'완납가능', loan:'-', nextdate:dateOffset(30), contractDate:dateOffset(-7),
+      memo:'계약 완료. 잔금 일정 안내 예정.',
+      units:[
+        {id:uid(), unitNo:'1203호', type:'84㎡A', feeAmt:520, status:'contracted', memo:'남향 로열층'}
+      ],
+      logs:[
+        {id:uid(), date:dateOffset(-7), method:'방문', content:'계약 체결', next:'중도금 안내'},
+      ]
+    },
+  ];
+  save();
+}
+
+/* ---------- 자동화: 한줄 브리핑 ---------- */
+function makeBrief(c){
+  const parts = [];
+  if(c.type) parts.push(c.type);
+  if(c.purpose) parts.push(c.purpose);
+  if(c.fund) parts.push(c.fund);
+
+  const lastLog = c.logs?.[c.logs.length-1];
+  if(lastLog){
+    const days = Math.abs(daysBetween(lastLog.date) || 0);
+    parts.push(days === 0 ? '오늘 상담' : `${days}일 전 상담`);
+  }
+  if(c.grade !== '계약'){
+    const dd = ddayLabel(c.nextdate);
+    parts.push(dd.t);
+  } else if(c.contractDate){
+    parts.push(`계약 ${fmtDate(c.contractDate)}`);
+  }
+  return parts.join(' · ');
+}
+
+/* ---------- 자동화: 등급별 연락주기 ---------- */
+const GRADE_CYCLE = { S:1, A:3, B:7, C:21, '계약':30 };
+const GRADE_FREQ = {
+  S:'매일 연락',
+  A:'2~3일 1회',
+  B:'주 1회',
+  C:'월 1~2회',
+  '계약':'이벤트별 관리',
+};
+const GRADE_ACTION = {
+  S:'오늘 전화 → 호수 선점 → 계약일 확정',
+  A:'할인 조건 정리 → 재방문 유도',
+  B:'비교단지 자료 → 정보 제공',
+  C:'억지 연락 금지 → 장기 신뢰 구축',
+  '계약':'잔금 확인 → 지인 소개 요청',
+};
+
+/* ---------- 자동화: 등급 자동 승급 ---------- */
+function autoUpgrade(c){
+  if(c.grade === 'B' && (c.logs?.length || 0) >= 5){
+    c.grade = 'A';
+    return true;
+  }
+  return false;
+}
+
+/* ---------- 자동화: 문자 템플릿 ---------- */
+function smsTemplate(c){
+  const map = {
+    S:`${c.name}님, 안녕하세요. 분양상담 ○○○입니다.\n\n전에 말씀해 주신 ${c.type||''} ${c.purpose||''} 조건으로 좋은 호수가 정리되었습니다. 오늘 중 통화 가능하실 때 짧게 연락 부탁드립니다.\n\n바로 안내드릴 수 있는 호수가 있어 우선순위로 연락드렸습니다.`,
+    A:`${c.name}님, 안녕하세요. 지난번 말씀하신 조건으로 정리된 내용 공유드립니다.\n\n원하시는 ${c.type||''} 기준으로 가능한 옵션 정리해 두었으니 편하실 때 한 번 더 방문해서 같이 살펴보시면 좋을 것 같습니다.`,
+    B:`${c.name}님, 안녕하세요. 검토에 도움이 되실 자료 보내드립니다.\n\n${c.type||'관심 평형'} 기준 주변 비교 자료와 최근 시세 동향 정리한 내용입니다. 천천히 보시고 궁금한 점 편하게 문의 주세요.`,
+    C:`${c.name}님, 안녕하세요. 분양상담 ○○○입니다.\n\n시장 흐름 변화가 있어 짧게 공유드립니다. 결정에 부담 없이 참고만 해주시면 됩니다.`,
+    '계약':`${c.name}님, 안녕하세요. 계약하신 ${c.type||''} 관련 일정 안내드립니다.\n\n중도금/잔금 일정 정리해 보내드릴 예정이며, 진행 중 확인 필요하신 부분 있으면 언제든 연락 주세요.`,
+  };
+  return map[c.grade] || map.B;
+}
+
+/* ---------- 현재 현장 고객 ---------- */
+function currentCustomers(){
+  return state.customers.filter(c => c.siteId === state.currentSiteId);
+}
+function gradeOrder(g){
+  return { S:1, A:2, B:3, C:4, '계약':5 }[g] || 9;
+}
+
+/* ===========================================================
+   렌더링
+   =========================================================== */
+
+function renderSiteTabs(){
+  const wrap = $('#site-tabs');
+  wrap.innerHTML = state.sites.map(s => {
+    const cnt = state.customers.filter(c => c.siteId === s.id).length;
+    const active = s.id === state.currentSiteId ? 'active' : '';
+    return `<button class="site-tab ${active}" data-id="${s.id}">${esc(s.name)}<span class="count">${cnt}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.site-tab').forEach(b => {
+    b.addEventListener('click', () => {
+      state.currentSiteId = b.dataset.id;
+      save();
+      renderAll();
+    });
+  });
+}
+
+function renderBottomNav(){
+  $$('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === state.currentTab);
+    b.onclick = () => {
+      state.currentTab = b.dataset.tab;
+      renderContent();
+      renderBottomNav();
+      window.scrollTo({top:0});
+    };
+  });
+}
+
+function renderContent(){
+  const c = $('#content');
+  if(state.currentTab === 'home') c.innerHTML = renderHome();
+  else if(state.currentTab === 'customers') c.innerHTML = renderCustomers();
+  else if(state.currentTab === 'guide') c.innerHTML = renderGuide();
+  c.classList.remove('fade-in'); void c.offsetWidth; c.classList.add('fade-in');
+
+  bindContent();
+}
+
+/* ---------- 홈 ---------- */
+function renderHome(){
+  const cs = currentCustomers();
+  const today = todayStr();
+
+  const todayList = cs.filter(c => c.nextdate && c.nextdate <= today && c.grade !== '계약')
+    .sort((a,b) => gradeOrder(a.grade)-gradeOrder(b.grade));
+  const upcoming = cs.filter(c => {
+    if(!c.nextdate || c.grade === '계약') return false;
+    const d = daysBetween(c.nextdate);
+    return d > 0 && d <= 3;
+  }).sort((a,b) => daysBetween(a.nextdate) - daysBetween(b.nextdate));
+
+  const stale = cs.filter(c => {
+    if(c.grade === '계약') return false;
+    const last = c.logs?.[c.logs.length-1];
+    if(!last) return true;
+    return Math.abs(daysBetween(last.date) || 0) >= 7;
+  });
+
+  const sUngraded = cs.filter(c => c.grade === 'S');
+  const expectedFee = cs.reduce((sum, c) => sum + (c.units?.reduce((s,u)=>s+(Number(u.feeAmt)||0),0) || 0), 0);
+
+  const todayCount = todayList.length;
+  const d3Count = upcoming.length;
+  const sCount = sUngraded.length;
+
+  const site = state.sites.find(s => s.id === state.currentSiteId);
+
+  let html = '';
+
+  html += `
+    <div class="status-banner">
+      <div class="label">TODAY · ${esc(site?.name||'')}</div>
+      <div class="greeting">오늘도 계약 한 건 만들어볼까요</div>
+      <div class="status-grid">
+        <div class="status-cell ${todayCount>0?'urgent':''}">
+          <div class="num">${todayCount}</div>
+          <div class="desc">오늘 연락</div>
+        </div>
+        <div class="status-cell">
+          <div class="num">${d3Count}</div>
+          <div class="desc">D-3 예정</div>
+        </div>
+        <div class="status-cell">
+          <div class="num">${sCount}</div>
+          <div class="desc">S급</div>
+        </div>
+        <div class="status-cell">
+          <div class="num">${expectedFee}</div>
+          <div class="desc">예상수수료(만)</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  if(todayCount === 0 && d3Count === 0 && stale.length === 0 && sCount === 0){
+    if(cs.length === 0){
+      html += `<div class="empty"><div class="emoji">🏠</div><div class="msg">아직 고객이 없어요</div><div class="sub">우측 상단 + 고객등록 버튼으로 시작하세요</div></div>`;
+    } else {
+      html += `<div class="empty"><div class="emoji">✨</div><div class="msg">오늘 처리할 핵심 일이 없어요</div><div class="sub">고객 탭에서 전체 관리 상태를 확인해 보세요</div></div>`;
+    }
+    return html;
+  }
+
+  if(todayList.length){
+    html += `
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span class="dot"></span>오늘 연락 고객</div>
+          <div class="section-count">${todayList.length}명</div>
+        </div>
+        ${todayList.map(c => actionCardHTML(c)).join('')}
+      </div>
+    `;
+  }
+  if(upcoming.length){
+    html += `
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span class="dot" style="background:var(--orange)"></span>D-3 이내 예정</div>
+          <div class="section-count">${upcoming.length}명</div>
+        </div>
+        ${upcoming.map(c => actionCardHTML(c)).join('')}
+      </div>
+    `;
+  }
+  if(stale.length){
+    html += `
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">⚠️ 7일 이상 미접촉</div>
+          <div class="section-count">${stale.length}명</div>
+        </div>
+        ${stale.slice(0,5).map(c => `
+          <div class="warn-card" data-id="${c.id}">
+            <div class="icon">⚠️</div>
+            <div class="text">
+              <b>${esc(c.name)}</b> <span style="color:#92400E; font-size:11.5px;">· ${esc(c.grade)}급</span>
+              <p>${makeBrief(c)}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  if(sUngraded.length){
+    html += `
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">🔥 S급 미계약</div>
+          <div class="section-count">${sUngraded.length}명</div>
+        </div>
+        ${sUngraded.map(c => actionCardHTML(c)).join('')}
+      </div>
+    `;
+  }
+  return html;
+}
+
+function actionCardHTML(c){
+  const dd = c.grade === '계약' ? {t:'계약완료', cls:'contracted'} : ddayLabel(c.nextdate);
+  return `
+    <div class="action-card" data-id="${c.id}">
+      <div class="info">
+        <div class="name-row">
+          <span class="name">${esc(c.name)}</span>
+          <span style="font-size:10.5px; padding:1px 6px; border-radius:5px; font-weight:700; background:#F1F5F9; color:var(--text-2);">${esc(c.grade)}</span>
+          <span style="font-size:11px; color:var(--text-3); font-weight:600; margin-left:auto;" class="dday-mini ${dd.cls}">${dd.t}</span>
+        </div>
+        <div class="brief">${esc(makeBrief(c))}</div>
+      </div>
+      ${c.phone ? `<a href="tel:${esc(c.phone)}" class="quick-call" onclick="event.stopPropagation();">📞</a>` : ''}
+    </div>
+  `;
+}
+
+/* ---------- 고객 리스트 ---------- */
+function renderCustomers(){
+  const cs = currentCustomers();
+  const filters = [
+    {k:'all', label:'전체', cls:''},
+    {k:'S', label:'S', cls:'s'},
+    {k:'A', label:'A', cls:'a'},
+    {k:'B', label:'B', cls:'b'},
+    {k:'C', label:'C', cls:'c'},
+    {k:'today', label:'오늘', cls:''},
+    {k:'d3', label:'D-3', cls:''},
+    {k:'계약', label:'계약', cls:'contracted'},
+  ];
+
+  let filtered = cs;
+  const f = state.currentFilter;
+  if(f === 'today'){
+    const t = todayStr();
+    filtered = cs.filter(c => c.nextdate && c.nextdate <= t && c.grade !== '계약');
+  } else if(f === 'd3'){
+    filtered = cs.filter(c => {
+      if(!c.nextdate || c.grade === '계약') return false;
+      const d = daysBetween(c.nextdate);
+      return d !== null && d <= 3;
+    });
+  } else if(f !== 'all'){
+    filtered = cs.filter(c => c.grade === f);
+  }
+
+  filtered.sort((a,b) => {
+    const go = gradeOrder(a.grade) - gradeOrder(b.grade);
+    if(go !== 0) return go;
+    const da = daysBetween(a.nextdate);
+    const db = daysBetween(b.nextdate);
+    return (da ?? 9999) - (db ?? 9999);
+  });
+
+  let html = `
+    <div class="filter-chips">
+      ${filters.map(ff => `<button class="chip ${ff.cls} ${state.currentFilter===ff.k?'active':''}" data-filter="${ff.k}">${ff.label}</button>`).join('')}
+    </div>
+  `;
+
+  if(filtered.length === 0){
+    html += `<div class="empty"><div class="emoji">🔍</div><div class="msg">해당 조건의 고객이 없어요</div></div>`;
+  } else {
+    html += filtered.map(c => {
+      const dd = c.grade === '계약' ? {t:'계약', cls:'contracted'} : ddayLabel(c.nextdate);
+      const gradeCls = c.grade === '계약' ? 'contracted' : c.grade;
+      return `
+        <div class="cust-card" data-id="${c.id}">
+          <div class="grade-badge ${gradeCls}">${c.grade==='계약'?'계약':c.grade}</div>
+          <div class="body">
+            <div class="top">
+              <span class="name">${esc(c.name)}</span>
+              <span class="dday ${dd.cls}">${dd.t}</span>
+            </div>
+            <div class="brief">${esc(makeBrief(c))}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  return html;
+}
+
+/* ---------- 가이드 ---------- */
+function renderGuide(){
+  const grades = [
+    {k:'S', cls:'s', title:'S급 — 계약 의지 확실', sub:'지금 당장 계약 가능', cycle:'매일', action:'오늘 전화 · 호수 선점 · 계약일 확정', focus:'결정 미루지 않기. 추가 망설임 차단'},
+    {k:'A', cls:'a', title:'A급 — 계약 의향 있음', sub:'조건 조율 중', cycle:'2~3일 1회', action:'할인 조건 정리 · 재방문 유도', focus:'결정 포인트(가격/조건/평형) 명확화'},
+    {k:'B', cls:'b', title:'B급 — 관심은 있음', sub:'결정 못 내림', cycle:'주 1회', action:'비교단지 자료 · 정보 제공', focus:'정보 신뢰 쌓기. 무리한 푸시 금지'},
+    {k:'C', cls:'c', title:'C급 — 의향 불분명', sub:'정보 수집 단계', cycle:'월 1~2회', action:'억지 연락 금지 · 장기 신뢰', focus:'시장 흐름·기회 포착 시점만 가볍게 터치'},
+    {k:'계약', cls:'contracted', title:'계약 — 완료', sub:'계약 후 관리', cycle:'이벤트별', action:'잔금 확인 · 지인 소개 요청', focus:'사후 만족도 → 추천 고객으로 전환'},
+  ];
+
+  let html = grades.map(g => `
+    <div class="guide-card ${g.cls}">
+      <div class="guide-head">
+        <div class="guide-grade">${g.k==='계약'?'계약':g.k}</div>
+        <div class="h-text">
+          <div class="h-title">${g.title}</div>
+          <div class="h-sub">${g.sub}</div>
+        </div>
+      </div>
+      <div class="guide-line"><div class="k">연락주기</div><div class="v">${g.cycle}</div></div>
+      <div class="guide-line"><div class="k">행동</div><div class="v">${g.action}</div></div>
+      <div class="guide-line"><div class="k">핵심</div><div class="v">${g.focus}</div></div>
+    </div>
+  `).join('');
+
+  html += `
+    <div class="guide-warn">
+      <h4>절대 하지 말아야 할 것</h4>
+      <ul>
+        <li>등급 무관 같은 빈도로 연락 (S급 놓침 + C급 불쾌)</li>
+        <li>이력 없이 머리로만 관리 (다음 행동 흐려짐)</li>
+        <li>C급에 매일 연락 (관계 망가짐)</li>
+        <li>S급 응답 늦게 → 경쟁 매물로 이탈</li>
+        <li>메모 미작성 → 재상담 시 신뢰 무너짐</li>
+        <li>계약 후 방치 → 지인 소개 기회 상실</li>
+      </ul>
+    </div>
+  `;
+  return html;
+}
+
+function bindContent(){
+  $$('.action-card, .cust-card, .warn-card').forEach(el => {
+    el.addEventListener('click', e => {
+      if(e.target.closest('.quick-call')) return;
+      openDetail(el.dataset.id);
+    });
+  });
+  $$('.chip').forEach(el => {
+    el.addEventListener('click', () => {
+      state.currentFilter = el.dataset.filter;
+      renderContent();
+    });
+  });
+}
+
+/* ===========================================================
+   고객 상세 (슬라이드 패널)
+   =========================================================== */
+function openDetail(id){
+  const c = state.customers.find(x => x.id === id);
+  if(!c) return;
+  state.selectedId = id;
+
+  // 자동 승급
+  if(autoUpgrade(c)) save();
+
+  const panel = $('#detail-panel');
+  panel.innerHTML = renderDetail(c);
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden', 'false');
+  panel.scrollTop = 0;
+  bindDetail(c);
+}
+function closeDetail(){
+  $('#detail-panel').classList.remove('open');
+  $('#detail-panel').setAttribute('aria-hidden', 'true');
+  state.selectedId = null;
+}
+
+function renderDetail(c){
+  const gradeCls = c.grade === '계약' ? 'contracted' : c.grade;
+  const lastLog = c.logs?.[c.logs.length-1];
+  const lastDate = lastLog ? fmtDateFull(lastLog.date) : '-';
+  const dd = c.grade === '계약' ? '계약완료' : ddayLabel(c.nextdate).t;
+
+  return `
+    <div class="detail-header">
+      <button class="btn-back" id="btn-back">←</button>
+      <div class="head-name">${esc(c.name)}</div>
+      <button class="btn-edit-cust" id="btn-edit-cust">수정</button>
+    </div>
+
+    <div class="brief-card">
+      <div class="grade-row">
+        <span class="brief-pill ${gradeCls}">${esc(c.grade)}급</span>
+        <span class="freq">${GRADE_FREQ[c.grade]||''}</span>
+      </div>
+      <div class="label">한줄 브리핑</div>
+      <div class="brief-line">${esc(makeBrief(c))}</div>
+    </div>
+
+    <div class="action-row">
+      <button class="act-btn call" id="act-call" ${!c.phone?'disabled style="opacity:.4"':''}>
+        <span class="ic">📞</span><span>전화</span>
+      </button>
+      <button class="act-btn sms" id="act-sms">
+        <span class="ic">📩</span><span>문자</span>
+      </button>
+      <button class="act-btn memo" id="act-memo">
+        <span class="ic">📋</span><span>메모</span>
+      </button>
+      <button class="act-btn log" id="act-log">
+        <span class="ic">➕</span><span>이력</span>
+      </button>
+    </div>
+
+    <div class="recommend-card">
+      <div class="label">▎다음 행동 추천</div>
+      <div class="text">${esc(GRADE_ACTION[c.grade]||'')}</div>
+    </div>
+
+    <div class="info-section">
+      <div class="section-label">핵심 정보</div>
+      <div class="info-grid">
+        <div class="info-cell" data-edit="grade"><div class="k">등급</div><div class="v">${esc(c.grade)}급</div></div>
+        <div class="info-cell" data-edit="nextdate"><div class="k">다음 연락</div><div class="v ${c.nextdate?'':'empty'}">${c.nextdate?fmtDateFull(c.nextdate):'미설정'}</div></div>
+        <div class="info-cell" data-edit="type"><div class="k">평형</div><div class="v ${c.type?'':'empty'}">${c.type?esc(c.type):'미입력'}</div></div>
+        <div class="info-cell" data-edit="purpose"><div class="k">목적</div><div class="v ${c.purpose?'':'empty'}">${c.purpose?esc(c.purpose):'미입력'}</div></div>
+        <div class="info-cell" data-edit="fund"><div class="k">자금</div><div class="v ${c.fund?'':'empty'}">${c.fund?esc(c.fund):'미입력'}</div></div>
+        <div class="info-cell" data-edit="loan"><div class="k">대출</div><div class="v ${c.loan?'':'empty'}">${c.loan?esc(c.loan):'미입력'}</div></div>
+        <div class="info-cell"><div class="k">상담 횟수</div><div class="v">${c.logs?.length||0}회</div></div>
+        <div class="info-cell"><div class="k">최근 접촉</div><div class="v ${lastLog?'':'empty'}">${lastDate}</div></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="section-label">메모 (탭하여 수정)</div>
+      <div class="memo-card" id="memo-card">
+        <div class="text ${c.memo?'':'empty'}">${c.memo?esc(c.memo):'메모를 입력해 주세요'}</div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="section-label">계약 물건 (${c.units?.length||0})</div>
+      <div class="unit-list">
+        ${(c.units||[]).map(u => `
+          <div class="unit-card" data-uid="${u.id}">
+            <div class="info">
+              <div class="top">
+                <span class="unitno">${esc(u.unitNo||'호수미정')}</span>
+                ${u.type?`<span class="type">${esc(u.type)}</span>`:''}
+                <span class="unit-status ${u.status||'available'}">${unitStatusLabel(u.status)}</span>
+              </div>
+              ${u.memo?`<div class="memo">${esc(u.memo)}</div>`:''}
+            </div>
+            <div class="fee">${u.feeAmt?(Number(u.feeAmt)+'만'):'-'}</div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn-add-unit" id="btn-add-unit">+ 물건 추가</button>
+    </div>
+
+    <div class="info-section">
+      <div class="section-label">상담 이력 (${c.logs?.length||0})</div>
+      <div class="log-list">
+        ${[...(c.logs||[])].reverse().map(l => `
+          <div class="log-item" data-lid="${l.id}">
+            <div class="top">
+              <span class="log-method ${methodCls(l.method)}">${esc(l.method)}</span>
+              <span class="log-date">${fmtDateFull(l.date)}</span>
+            </div>
+            <div class="log-content">${esc(l.content)}</div>
+            ${l.next?`<div class="log-next">${esc(l.next)}</div>`:''}
+          </div>
+        `).join('')}
+        ${(!c.logs || c.logs.length===0)?`<div style="text-align:center; padding:24px; color:var(--text-3); font-size:12.5px; background:#fff; border-radius:14px; border:1px solid var(--line);">아직 상담 이력이 없습니다</div>`:''}
+      </div>
+    </div>
+
+    <div style="height:calc(160px + var(--credit-h) + var(--safe-bot));"></div>
+  `;
+}
+
+function unitStatusLabel(s){
+  return { available:'대기', nego:'협상중', contracted:'계약완료', hold:'보류' }[s||'available'];
+}
+function methodCls(m){
+  return { '전화':'call','카카오':'kakao','문자':'sms','방문':'' }[m]||'';
+}
+
+function bindDetail(c){
+  $('#btn-back').addEventListener('click', closeDetail);
+  $('#btn-edit-cust').addEventListener('click', () => openCustomerSheet(c));
+
+  const callBtn = $('#act-call');
+  if(c.phone) callBtn.addEventListener('click', () => location.href = `tel:${c.phone}`);
+  $('#act-sms').addEventListener('click', () => openSmsSheet(c));
+  $('#act-memo').addEventListener('click', () => openMemoSheet(c));
+  $('#act-log').addEventListener('click', () => openLogSheet(c));
+
+  $('#memo-card').addEventListener('click', () => openMemoSheet(c));
+  $('#btn-add-unit').addEventListener('click', () => openUnitSheet(c));
+
+  $$('.info-cell[data-edit]').forEach(el => {
+    el.addEventListener('click', () => {
+      const f = el.dataset.edit;
+      if(f === 'grade') openGradeSheet(c);
+      else if(f === 'nextdate') openNextDateSheet(c);
+      else openFieldSheet(c, f);
+    });
+  });
+
+  $$('.unit-card').forEach(el => {
+    el.addEventListener('click', () => {
+      const u = (c.units||[]).find(x => x.id === el.dataset.uid);
+      if(u) openUnitSheet(c, u);
+    });
+  });
+
+  $$('.log-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const l = (c.logs||[]).find(x => x.id === el.dataset.lid);
+      if(l) openLogSheet(c, l);
+    });
+  });
+}
+
+function refreshDetail(){
+  if(!state.selectedId) return;
+  const c = state.customers.find(x => x.id === state.selectedId);
+  if(!c){ closeDetail(); return; }
+  $('#detail-panel').innerHTML = renderDetail(c);
+  bindDetail(c);
+}
+
+/* ===========================================================
+   바텀시트 / 모달
+   =========================================================== */
+function openSheet(html){
+  const sheet = $('#sheet');
+  sheet.innerHTML = `<div class="sheet-handle"></div>${html}`;
+  $('#modal-backdrop').classList.add('open');
+  sheet.classList.add('open');
+}
+function closeSheet(){
+  $('#modal-backdrop').classList.remove('open');
+  $('#sheet').classList.remove('open');
+  setTimeout(()=>{ $('#sheet').innerHTML=''; }, 300);
+}
+$('#modal-backdrop').addEventListener('click', closeSheet);
+
+/* ---- 고객 등록/수정 ---- */
+function openCustomerSheet(c=null){
+  const isNew = !c;
+  const data = c || {
+    id:uid(), siteId:state.currentSiteId, name:'', phone:'',
+    grade:'B', score:5, type:'', purpose:'', fund:'', loan:'',
+    nextdate:dateOffset(7), contractDate:'', memo:'', units:[], logs:[]
+  };
+  openSheet(`
+    <div class="sheet-head">
+      <h3>${isNew?'고객 등록':'고객 수정'}</h3>
+      <button class="sheet-close" data-act="close">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="field-label">등급<span class="req">*</span></label>
+        <div class="grade-picker" id="g-pick">
+          ${['S','A','B','C','계약'].map(g => `<button type="button" class="grade-opt ${data.grade===g?'selected':''}" data-g="${g}">${g==='계약'?'계약':g}</button>`).join('')}
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">이름<span class="req">*</span></label>
+          <input class="input" id="f-name" value="${esc(data.name)}" placeholder="홍길동">
+        </div>
+        <div class="field">
+          <label class="field-label">연락처</label>
+          <input class="input" id="f-phone" value="${esc(data.phone)}" placeholder="010-0000-0000" inputmode="tel">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">관심 평형</label>
+          <input class="input" id="f-type" list="dl-type" value="${esc(data.type)}" placeholder="84㎡">
+          <datalist id="dl-type">${FIELD_OPTIONS.type.map(o => `<option value="${esc(o)}">`).join('')}</datalist>
+        </div>
+        <div class="field">
+          <label class="field-label">목적</label>
+          <select class="select" id="f-purpose">
+            ${['','실거주','투자','갭투자','상속','기타'].map(o => `<option value="${o}" ${data.purpose===o?'selected':''}>${o||'선택'}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">여유 자금</label>
+          <input class="input" id="f-fund" list="dl-fund" value="${esc(data.fund)}" placeholder="2~3억">
+          <datalist id="dl-fund">${FIELD_OPTIONS.fund.map(o => `<option value="${esc(o)}">`).join('')}</datalist>
+        </div>
+        <div class="field">
+          <label class="field-label">대출 상태</label>
+          <input class="input" id="f-loan" list="dl-loan" value="${esc(data.loan)}" placeholder="DSR 여유">
+          <datalist id="dl-loan">${FIELD_OPTIONS.loan.map(o => `<option value="${esc(o)}">`).join('')}</datalist>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">다음 연락일</label>
+          <input class="input" id="f-next" type="date" value="${data.nextdate||''}">
+        </div>
+        <div class="field">
+          <label class="field-label">계약일</label>
+          <input class="input" id="f-cdate" type="date" value="${data.contractDate||''}">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">특이사항 / 메모</label>
+        <textarea class="textarea" id="f-memo" placeholder="고객 특성, 결정 포인트, 우려사항 등">${esc(data.memo)}</textarea>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      ${!isNew?`<button class="btn btn-danger" data-act="del">삭제</button>`:''}
+      <button class="btn btn-primary" data-act="save">저장</button>
+    </div>
+  `);
+
+  let grade = data.grade;
+  $$('#g-pick .grade-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      grade = b.dataset.g;
+      $$('#g-pick .grade-opt').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(!act) return;
+    if(act === 'close') closeSheet();
+    if(act === 'del'){
+      if(confirm(`${data.name||'이 고객'}님을 삭제하시겠어요?`)){
+        state.customers = state.customers.filter(x => x.id !== data.id);
+        save();
+        closeSheet(); closeDetail(); renderAll();
+        toast('삭제되었습니다');
+      }
+    }
+    if(act === 'save'){
+      const name = $('#f-name').value.trim();
+      if(!name){ toast('이름을 입력하세요'); return; }
+      data.grade = grade;
+      data.name = name;
+      data.phone = $('#f-phone').value.trim();
+      data.type = $('#f-type').value.trim();
+      data.purpose = $('#f-purpose').value;
+      data.fund = $('#f-fund').value.trim();
+      data.loan = $('#f-loan').value.trim();
+      data.nextdate = $('#f-next').value;
+      data.contractDate = $('#f-cdate').value;
+      data.memo = $('#f-memo').value.trim();
+      if(isNew){
+        state.customers.push(data);
+        save();
+        closeSheet();
+        renderAll();
+        toast('등록 완료');
+        setTimeout(() => openDetail(data.id), 100);
+      } else {
+        save();
+        closeSheet();
+        refreshDetail();
+        renderContent();
+        toast('수정 완료');
+      }
+    }
+  });
+}
+
+/* ---- 단일 필드 수정 ---- */
+const FIELD_OPTIONS = {
+  type: ['59㎡','74㎡','84㎡','99㎡','114㎡','129㎡','미정'],
+  purpose: ['실거주','투자','갭투자','상속','기타'],
+  fund: ['1억 미만','1~2억','2~3억','3~5억','5억+','미정'],
+  loan: ['DSR 여유','DSR 빡빡','무담보 가능','대출 검토중','대출 안함','미상'],
+};
+
+function openFieldSheet(c, field){
+  const labels = { type:'관심 평형', purpose:'목적', fund:'여유 자금', loan:'대출 상태' };
+  const val = c[field] || '';
+  const opts = FIELD_OPTIONS[field] || [];
+  const cols3 = field === 'type';
+
+  openSheet(`
+    <div class="sheet-head"><h3>${labels[field]}</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="field-label">목록에서 선택</label>
+        <div class="opt-picker ${cols3?'cols-3':''}" id="o-pick">
+          ${opts.map(o => `<button type="button" class="opt-row ${val===o?'selected':''}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">직접 입력 (목록에 없으면)</label>
+        <input class="input" id="f-val" value="${esc(val)}" placeholder="예: 84㎡A, 4억대 등">
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" data-act="clear">비우기</button>
+      <button class="btn btn-primary" data-act="save">저장</button>
+    </div>
+  `);
+
+  $$('#o-pick .opt-row').forEach(b => {
+    b.addEventListener('click', () => {
+      $('#f-val').value = b.dataset.v;
+      $$('#o-pick .opt-row').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+
+  $('#f-val').addEventListener('input', () => {
+    const v = $('#f-val').value.trim();
+    $$('#o-pick .opt-row').forEach(x => x.classList.toggle('selected', x.dataset.v === v));
+  });
+
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'clear'){ $('#f-val').value=''; $$('#o-pick .opt-row').forEach(x => x.classList.remove('selected')); }
+    if(act === 'save'){
+      c[field] = $('#f-val').value.trim();
+      save(); closeSheet(); refreshDetail(); renderContent(); toast('저장됨');
+    }
+  });
+}
+
+/* ---- 등급 변경 ---- */
+function openGradeSheet(c){
+  openSheet(`
+    <div class="sheet-head"><h3>등급 변경</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <div class="field">
+        <div class="grade-picker" id="g-pick">
+          ${['S','A','B','C','계약'].map(g => `<button type="button" class="grade-opt ${c.grade===g?'selected':''}" data-g="${g}">${g==='계약'?'계약':g}</button>`).join('')}
+        </div>
+      </div>
+    </div>
+  `);
+  $$('#g-pick .grade-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      c.grade = b.dataset.g;
+      if(c.grade === '계약' && !c.contractDate) c.contractDate = todayStr();
+      save(); closeSheet(); refreshDetail(); renderContent(); renderSiteTabs();
+      toast(`${c.grade}급으로 변경됨`);
+    });
+  });
+  $('#sheet').addEventListener('click', e => {
+    if(e.target.closest('[data-act="close"]')) closeSheet();
+  });
+}
+
+/* ---- 다음 연락일 ---- */
+function openNextDateSheet(c){
+  openSheet(`
+    <div class="sheet-head"><h3>다음 연락일</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <div class="field">
+        <input class="input" id="f-date" type="date" value="${c.nextdate||''}">
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px;">
+        <button class="btn btn-secondary" data-quick="0" style="padding:10px 0; font-size:12px;">오늘</button>
+        <button class="btn btn-secondary" data-quick="1" style="padding:10px 0; font-size:12px;">내일</button>
+        <button class="btn btn-secondary" data-quick="3" style="padding:10px 0; font-size:12px;">3일 후</button>
+        <button class="btn btn-secondary" data-quick="7" style="padding:10px 0; font-size:12px;">1주일</button>
+      </div>
+    </div>
+    <div class="sheet-actions"><button class="btn btn-primary" data-act="save">저장</button></div>
+  `);
+  $$('[data-quick]').forEach(b => {
+    b.addEventListener('click', () => { $('#f-date').value = dateOffset(Number(b.dataset.quick)); });
+  });
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'save'){
+      c.nextdate = $('#f-date').value;
+      save(); closeSheet(); refreshDetail(); renderContent(); toast('저장됨');
+    }
+  });
+}
+
+/* ---- 메모 ---- */
+function openMemoSheet(c){
+  openSheet(`
+    <div class="sheet-head"><h3>메모</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <textarea class="textarea" id="f-memo" style="min-height:200px;" placeholder="고객 특성, 결정 포인트, 우려사항 등">${esc(c.memo||'')}</textarea>
+    </div>
+    <div class="sheet-actions"><button class="btn btn-primary" data-act="save">저장</button></div>
+  `);
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'save'){
+      c.memo = $('#f-memo').value.trim();
+      save(); closeSheet(); refreshDetail(); toast('저장됨');
+    }
+  });
+}
+
+/* ---- 상담 이력 ---- */
+function openLogSheet(c, log=null){
+  const isNew = !log;
+  const data = log || { id:uid(), date:todayStr(), method:'전화', content:'', next:'' };
+  openSheet(`
+    <div class="sheet-head">
+      <h3>${isNew?'상담 이력 추가':'이력 수정'}</h3>
+      <button class="sheet-close" data-act="close">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="field-label">방법</label>
+        <div class="method-picker" id="m-pick">
+          ${['방문','전화','카카오','문자'].map(m => `<button type="button" class="method-opt ${data.method===m?'selected':''}" data-m="${m}">${m}</button>`).join('')}
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">날짜</label>
+        <input class="input" id="f-date" type="date" value="${data.date||todayStr()}">
+      </div>
+      <div class="field">
+        <label class="field-label">상담 내용<span class="req">*</span></label>
+        <textarea class="textarea" id="f-content" placeholder="무엇을 이야기했는지">${esc(data.content||'')}</textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">다음 조치</label>
+        <input class="input" id="f-next" value="${esc(data.next||'')}" placeholder="다음에 해야할 일">
+      </div>
+      ${isNew?`<div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:10px 12px; font-size:11.5px; color:#92400E;">💡 이력 추가 시 다음 연락일이 ${c.grade}급 기준 (${GRADE_CYCLE[c.grade]||7}일 후)으로 자동 설정됩니다</div>`:''}
+    </div>
+    <div class="sheet-actions">
+      ${!isNew?`<button class="btn btn-danger" data-act="del">삭제</button>`:''}
+      <button class="btn btn-primary" data-act="save">저장</button>
+    </div>
+  `);
+  let method = data.method;
+  $$('#m-pick .method-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      method = b.dataset.m;
+      $$('#m-pick .method-opt').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'del'){
+      if(confirm('이 이력을 삭제하시겠어요?')){
+        c.logs = c.logs.filter(x => x.id !== data.id);
+        save(); closeSheet(); refreshDetail(); toast('삭제됨');
+      }
+    }
+    if(act === 'save'){
+      const content = $('#f-content').value.trim();
+      if(!content){ toast('상담 내용을 입력하세요'); return; }
+      data.method = method;
+      data.date = $('#f-date').value || todayStr();
+      data.content = content;
+      data.next = $('#f-next').value.trim();
+      if(isNew){
+        c.logs = c.logs || [];
+        c.logs.push(data);
+        // 자동 다음 연락일
+        const cycle = GRADE_CYCLE[c.grade] || 7;
+        c.nextdate = dateOffset(cycle);
+        // 자동 승급
+        autoUpgrade(c);
+      }
+      save(); closeSheet(); refreshDetail(); renderContent();
+      toast(isNew?`이력 추가 · 다음 연락 ${GRADE_CYCLE[c.grade]||7}일 후`:'수정됨');
+    }
+  });
+}
+
+/* ---- 물건 ---- */
+function openUnitSheet(c, unit=null){
+  const isNew = !unit;
+  const data = unit || { id:uid(), unitNo:'', type:c.type||'', feeAmt:0, status:'available', memo:'' };
+  openSheet(`
+    <div class="sheet-head">
+      <h3>${isNew?'물건 추가':'물건 수정'}</h3>
+      <button class="sheet-close" data-act="close">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">호수</label>
+          <input class="input" id="f-no" value="${esc(data.unitNo)}" placeholder="1504호">
+        </div>
+        <div class="field">
+          <label class="field-label">평형</label>
+          <input class="input" id="f-type" value="${esc(data.type)}" placeholder="84㎡">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">수수료 (만원)</label>
+        <input class="input" id="f-fee" value="${data.feeAmt||''}" inputmode="numeric" placeholder="500">
+      </div>
+      <div class="field">
+        <label class="field-label">상태</label>
+        <div class="status-picker" id="s-pick">
+          ${[
+            {k:'available',l:'대기'},{k:'nego',l:'협상중'},
+            {k:'contracted',l:'계약완료'},{k:'hold',l:'보류'}
+          ].map(s => `<button type="button" class="status-opt ${data.status===s.k?'selected':''}" data-s="${s.k}">${s.l}</button>`).join('')}
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">메모</label>
+        <input class="input" id="f-memo" value="${esc(data.memo||'')}" placeholder="남향 로열층 등">
+      </div>
+    </div>
+    <div class="sheet-actions">
+      ${!isNew?`<button class="btn btn-danger" data-act="del">삭제</button>`:''}
+      <button class="btn btn-primary" data-act="save">저장</button>
+    </div>
+  `);
+  let status = data.status;
+  $$('#s-pick .status-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      status = b.dataset.s;
+      $$('#s-pick .status-opt').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'del'){
+      if(confirm('이 물건을 삭제하시겠어요?')){
+        c.units = c.units.filter(x => x.id !== data.id);
+        save(); closeSheet(); refreshDetail(); toast('삭제됨');
+      }
+    }
+    if(act === 'save'){
+      data.unitNo = $('#f-no').value.trim();
+      data.type = $('#f-type').value.trim();
+      data.feeAmt = Number($('#f-fee').value) || 0;
+      data.status = status;
+      data.memo = $('#f-memo').value.trim();
+      if(isNew){ c.units = c.units || []; c.units.push(data); }
+      save(); closeSheet(); refreshDetail(); renderContent();
+      toast('저장됨');
+    }
+  });
+}
+
+/* ---- 문자 ---- */
+function openSmsSheet(c){
+  const tpl = smsTemplate(c);
+  openSheet(`
+    <div class="sheet-head"><h3>문자 템플릿 (${esc(c.grade)}급)</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <div class="sms-preview" id="sms-text">${esc(tpl)}</div>
+      <div style="font-size:11.5px; color:var(--text-3); padding:0 2px;">발송 직전 내용을 다시 한 번 검토해 주세요. 복사해서 메시지 앱에 붙여넣어 발송할 수 있습니다.</div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" data-act="copy">복사</button>
+      ${c.phone?`<button class="btn btn-gold" data-act="sms-app">메시지 앱 열기</button>`:''}
+    </div>
+  `);
+  $('#sheet').addEventListener('click', async e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'copy'){
+      try{
+        await navigator.clipboard.writeText(tpl);
+        toast('복사 완료');
+      } catch(err){
+        toast('복사 실패');
+      }
+    }
+    if(act === 'sms-app'){
+      const body = encodeURIComponent(tpl);
+      location.href = `sms:${c.phone}?body=${body}`;
+    }
+  });
+}
+
+/* ---- 현장 관리 ---- */
+function openSiteSheet(){
+  openSheet(`
+    <div class="sheet-head"><h3>현장 관리</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body" id="site-body">
+      ${state.sites.map(s => {
+        const cnt = state.customers.filter(c => c.siteId === s.id).length;
+        return `
+          <div class="site-row">
+            <div class="info">
+              <div class="nm">${esc(s.name)}</div>
+              <div class="ad">${esc(s.addr||'주소 미입력')} · 고객 ${cnt}명</div>
+            </div>
+            <div class="icons">
+              <button class="icon-btn" data-act="rename" data-id="${s.id}">✎</button>
+              <button class="icon-btn danger" data-act="del" data-id="${s.id}">🗑</button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+      <button class="btn-add-unit" data-act="add" style="margin-top:12px;">+ 현장 추가</button>
+    </div>
+  `);
+
+  $('#sheet').addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]');
+    if(!btn) return;
+    const act = btn.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'add') openSiteEditSheet();
+    if(act === 'rename'){
+      const s = state.sites.find(x => x.id === btn.dataset.id);
+      if(s) openSiteEditSheet(s);
+    }
+    if(act === 'del'){
+      const sid = btn.dataset.id;
+      const cnt = state.customers.filter(c => c.siteId === sid).length;
+      if(cnt > 0){
+        toast(`고객 ${cnt}명이 있어 삭제할 수 없습니다`);
+        return;
+      }
+      if(state.sites.length <= 1){
+        toast('마지막 현장은 삭제할 수 없습니다');
+        return;
+      }
+      if(confirm('이 현장을 삭제하시겠어요?')){
+        state.sites = state.sites.filter(x => x.id !== sid);
+        if(state.currentSiteId === sid) state.currentSiteId = state.sites[0].id;
+        save(); closeSheet(); renderAll();
+        toast('삭제됨');
+      }
+    }
+  });
+}
+
+function openSiteEditSheet(site=null){
+  const isNew = !site;
+  const data = site || { id:uid(), name:'', addr:'' };
+  openSheet(`
+    <div class="sheet-head"><h3>${isNew?'현장 추가':'현장 수정'}</h3><button class="sheet-close" data-act="close">✕</button></div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="field-label">현장명<span class="req">*</span></label>
+        <input class="input" id="f-name" value="${esc(data.name)}" placeholder="래미안 퍼스티지">
+      </div>
+      <div class="field">
+        <label class="field-label">주소</label>
+        <input class="input" id="f-addr" value="${esc(data.addr||'')}" placeholder="서울 서초구">
+      </div>
+    </div>
+    <div class="sheet-actions"><button class="btn btn-primary" data-act="save">저장</button></div>
+  `);
+  $('#sheet').addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if(act === 'close') closeSheet();
+    if(act === 'save'){
+      const name = $('#f-name').value.trim();
+      if(!name){ toast('현장명을 입력하세요'); return; }
+      data.name = name;
+      data.addr = $('#f-addr').value.trim();
+      if(isNew){
+        state.sites.push(data);
+        state.currentSiteId = data.id;
+      }
+      save(); closeSheet(); renderAll();
+      toast(isNew?'현장 추가됨':'수정됨');
+    }
+  });
+}
+
+/* ---- 토스트 ---- */
+let toastTimer;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ===========================================================
+   초기화
+   =========================================================== */
+function renderAll(){
+  renderSiteTabs();
+  renderContent();
+  renderBottomNav();
+}
+
+document.getElementById('btn-new-cust').addEventListener('click', () => {
+  if(state.sites.length === 0){
+    toast('먼저 현장을 추가하세요');
+    openSiteSheet();
+    return;
+  }
+  openCustomerSheet();
+});
+document.getElementById('btn-site-manage').addEventListener('click', openSiteSheet);
+
+// ESC로 패널 닫기
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if($('#sheet').classList.contains('open')) closeSheet();
+    else if($('#detail-panel').classList.contains('open')) closeDetail();
+  }
+});
+
+load();
+renderAll();
+</script>
+</body>
+</html>
